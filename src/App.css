@@ -1,6 +1,6 @@
 .App {
 	text-align: center;
-	background-color: #6b8e23;
+	margin: 50px;
 }
 
 .count {
@@ -30,7 +30,17 @@ h1 {
 	padding: 20px 10px 10px 10px;
 }
 
-.input-group span{
+.input-group span {
 	width: 150px;
 	justify-content: center;
+}
+
+.active {
+	color: white;
+	background-color: #B0C4DE;
+}
+
+a{
+	text-decoration: none !important;
+	color: green;	
 }
