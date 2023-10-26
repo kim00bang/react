@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Table, Spinner, Button, InputGroup, Form, Row, Col } from 'react-bootstrap';
+import LocalModal from '../ex03/LocalModal';
 
 const LocalSearch = () => {
     const [locals, setLocals] = useState([]);
@@ -54,7 +55,7 @@ const LocalSearch = () => {
                                 <form onSubmit={onSubmit}>
                                     <InputGroup>
                                         <Form.Control onChange={(e)=>setQuery(e.target.value)} value={query}/>
-                                        <Button type='submit'>검색</Button>
+                                        <Button variant="success" type='submit'>검색</Button>
                                     </InputGroup>
                                 </form>
                             </Col>
@@ -68,6 +69,7 @@ const LocalSearch = () => {
                             <td>지역명</td>
                             <td>주소</td>
                             <td>전화번호</td>
+                            <td>지역정보</td>
                         </thead>
                         <tbody>
                             {locals.map(local =>
@@ -75,15 +77,17 @@ const LocalSearch = () => {
                                     <td>{local.place_name}</td>
                                     <td>{local.address_name}</td>
                                     <td>{local.phone}</td>
+                                    <td><LocalModal local={local}/></td>
                                 </tr>
                             )}
                         </tbody>
                     </Table>
                     <div>
                     <Button onClick={()=>navigator(`/local?page=${page-1}&query=${query}`)}
-                            disabled={page===1}>이전</Button>
+                            variant="success" disabled={page===1}>이전</Button>
                         <span className='mx-3'>{page}/{Math.ceil(total/5)}</span>
-                        <Button onClick={()=>navigator(`/local?page=${page+1}&query=${query}`)} disabled={end}>다음</Button>  
+                        <Button onClick={()=>navigator(`/local?page=${page+1}&query=${query}`)} 
+                        variant="success" disabled={end}>다음</Button>  
                     </div>
                 </>
             }
