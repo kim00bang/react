@@ -22,7 +22,7 @@
 
 .text {
 	margin: 0px 20px;
-	font-size: 30px;
+	font-size: 25px;
 }
 
 h1 {
@@ -35,12 +35,15 @@ h1 {
 	justify-content: center;
 }
 
-.active {
-	color: white;
-	background-color: #B0C4DE;
-}
-
 a{
 	text-decoration: none !important;
 	color: green;	
+}
+
+.ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
 }

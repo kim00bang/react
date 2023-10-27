@@ -1,11 +1,16 @@
+import { Container } from 'react-bootstrap';
 import './App.css';
-import RouterPage from './components/ex03/RouterPage';
+import HeaderPage from './components/shop/HeaderPage';
+import RouterPage from './components/shop/RouterPage';
 
 const App = () => {
+	const background = "/images/header02.png";
 	return (
-		<div className="App">
+		<Container>
+			<img src={background} width="100%" />
+			<HeaderPage />
 			<RouterPage />
-		</div>
+		</Container>
 	);
 }
 
