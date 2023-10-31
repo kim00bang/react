@@ -47,3 +47,17 @@ a{
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
 }
+
+.photo {
+	border-radius: 50%;
+}
+
+.r{
+	color: #8d79e4;
+	cursor: pointer;
+}
+
+.rs{
+	color: #cf74cf;
+	cursor: pointer;
+}

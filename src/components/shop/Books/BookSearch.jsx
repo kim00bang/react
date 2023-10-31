@@ -16,7 +16,7 @@ const BookSearch = () => {
     const [end, setEnd] = useState(false);
     const [chcnt, setChcnt] = useState(0);
 
-    const getBooks = async () => {
+    const getBooks = async() => {
         const url = `https://dapi.kakao.com/v3/search/book?target=title&query=${query}&size=5&page=${page}`;
         const config = {
             headers: {
