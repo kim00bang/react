@@ -10,12 +10,12 @@ const LocalSearch = () => {
     const [total, setTotal] = useState(0);
     const [end, setEnd] = useState(false);
 
-    const navigator=useNavigate();
+    const navigator = useNavigate();
     const location = useLocation();
-    const search=new URLSearchParams(location.search);
-    let page=parseInt(search.get("page"));
+    const search = new URLSearchParams(location.search);
+    let page = parseInt(search.get("page"));
     //let query = search.get("query");
-    const[query, setQuery] = useState(search.get("query"))
+    const [query, setQuery] = useState(search.get("query"))
     const getLocal = async () => {
         const url = `https://dapi.kakao.com/v2/local/search/keyword.json?query=${query}&size=5&page=${page}`;
         const config = {
@@ -31,7 +31,7 @@ const LocalSearch = () => {
         setLoading(false);
     }
 
-    const onSubmit =(e)=>{
+    const onSubmit = (e) => {
         e.preventDefault();
         navigator(`/local?page=1&query=${query}`);
     }
@@ -54,7 +54,7 @@ const LocalSearch = () => {
                             <Col>
                                 <form onSubmit={onSubmit}>
                                     <InputGroup>
-                                        <Form.Control onChange={(e)=>setQuery(e.target.value)} value={query}/>
+                                        <Form.Control onChange={(e) => setQuery(e.target.value)} value={query} />
                                         <Button variant="success" type='submit'>검색</Button>
                                     </InputGroup>
                                 </form>
@@ -77,17 +77,17 @@ const LocalSearch = () => {
                                     <td>{local.place_name}</td>
                                     <td>{local.address_name}</td>
                                     <td>{local.phone}</td>
-                                    <td><LocalModal local={local}/></td>
+                                    <td><LocalModal local={local} /></td>
                                 </tr>
                             )}
                         </tbody>
                     </Table>
                     <div>
-                    <Button onClick={()=>navigator(`/local?page=${page-1}&query=${query}`)}
-                            variant="success" disabled={page===1}>이전</Button>
-                        <span className='mx-3'>{page}/{Math.ceil(total/5)}</span>
-                        <Button onClick={()=>navigator(`/local?page=${page+1}&query=${query}`)} 
-                        variant="success" disabled={end}>다음</Button>  
+                        <Button onClick={() => navigator(`/local?page=${page - 1}&query=${query}`)}
+                            variant="success" disabled={page === 1}>이전</Button>
+                        <span className='mx-3'>{page}/{Math.ceil(total / 5)}</span>
+                        <Button onClick={() => navigator(`/local?page=${page + 1}&query=${query}`)}
+                            variant="success" disabled={end}>다음</Button>
                     </div>
                 </>
             }
