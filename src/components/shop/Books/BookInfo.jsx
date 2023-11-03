@@ -1,12 +1,15 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { NavLink, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Spinner, Row, Col, Card, Button } from 'react-bootstrap';
 import { BsHeartbreakFill, BsHeart, BsFillEnvelopeFill } from "react-icons/bs";
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import ReviewPage from './ReviewPage';
+import { BoxContext } from '../BoxContext';
+
 const BookInfo = () => {
+    const { setBox } = useContext(BoxContext);
     const { bid } = useParams();
     const [book, setBook] = useState('');
     const [loading, setLoading] = useState(false);
@@ -36,6 +39,18 @@ const BookInfo = () => {
         getBook();
     }
 
+    const onClickCart = async () => {
+        const res = await axios.post('/cart/insert', { bid, uid: sessionStorage.getItem("uid") });
+        setBox({
+            show: true,
+            message: res.data === 0 ? '장바구니에 등록 되었습니다\n쇼핑을 계속 하시겠습니까?'
+                : '이미 장바구니에 존재합니다.\n쇼핑을 계속 하시겠습니까?',
+            action: () => {
+                window.location.href = "/";
+            }
+        })
+    }
+
     useEffect(() => {
         getBook();
     }, [])
@@ -58,8 +73,12 @@ const BookInfo = () => {
                                 <div className=' mb-2'>출판사 : {book.publisher}</div>
                                 <div className=' mb-2'>가격 : {book.fmtprice}원</div>
                                 <div className=' mb-2'>등록일 : {book.fmtdate}</div>
-                                <Button size='sm' variant='success'>장바구니</Button>
-                                <Button className='ms-2' size='sm' variant='success'>바로 구매</Button>
+                                {sessionStorage.getItem("uid") &&
+                                    <div>
+                                        <Button onClick={onClickCart} size='sm' variant='success'>장바구니</Button>
+                                        <Button className='ms-2' size='sm' variant='success'>바로 구매</Button>
+                                    </div>
+                                }
                                 <span>
                                     <span className='ms-3'>{book.ucnt === 0 ?
                                         <BsHeart className='rs' onClick={() => onClickHeart(book.bid)} />
@@ -86,7 +105,7 @@ const BookInfo = () => {
                             <div>{book.contents}</div>
                         </Tab>
                         <Tab eventKey="review" title="리뷰">
-                            <ReviewPage location={location} setBook={setBook} book={book}/>
+                            <ReviewPage location={location} setBook={setBook} book={book} />
                         </Tab>
                     </Tabs>
                 </Col>

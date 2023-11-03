@@ -9,6 +9,7 @@ import UpdatePage from './users/UpdatePage'
 import BookRead from './Books/BookRead'
 import BookUpdate from './Books/BookUpdate'
 import BookInfo from './Books/BookInfo'
+import CartPage from './orders/CartPage'
 
 const RouterPage = () => {
     return (
@@ -17,11 +18,12 @@ const RouterPage = () => {
             <Route path='/books/search' element={<BookSearch />} />
             <Route path='/books/list' element={<BookList />} />
             <Route path='/books/read/:bid' element={<BookRead />} />
-            <Route path='/books/update/:bid' element={<BookUpdate/>}/>
-            <Route path='/books/info/:bid' element={<BookInfo/>}/>
+            <Route path='/books/update/:bid' element={<BookUpdate />} />
+            <Route path='/books/info/:bid' element={<BookInfo />} />
             <Route path='/users/login' element={<LoginPage />} />
             <Route path='/users/mypage' element={<MyPage />} />
             <Route path='/users/update' element={<UpdatePage />} />
+            <Route path='/orders/cart' element={<CartPage />} />
         </Routes>
     )
 }

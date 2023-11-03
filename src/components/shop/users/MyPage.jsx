@@ -1,8 +1,10 @@
 import axios from 'axios'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Spinner, Row, Col, Card, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import { BoxContext } from '../BoxContext';
 const MyPage = () => {
+    const {box, setBox} = useContext(BoxContext);
     const navi = useNavigate();
     const ref_file = useRef(null);
     const [loading, setLoading] = useState(false);
@@ -36,8 +38,13 @@ const MyPage = () => {
 
     const onUpdatePhoto = async () => {
         if (!file) {
-            alert("수정할 사진을 선택하세요.");
+            //alert("수정할 사진을 선택하세요.");
+            setBox({
+                show: true,
+                message: "수정할 사진을 선택해주세요"
+            })
         } else {
+            /*
             if (window.confirm("사진을 수정하시겠습니까?")) {
                 //사진 저장
                 const formData = new FormData();
@@ -45,7 +52,17 @@ const MyPage = () => {
                 formData.append("uid", uid);
                 await axios.post('/users/update/photo', formData);
                 alert("사진이 변경 되었습니다.");
-            }
+            }*/
+            setBox({
+                show: true,
+                message: "변경된 사진을 저장하실래요?",
+                action: async () => {
+                    const formData = new FormData();
+                    formData.append("file", file);
+                    formData.append("uid", uid);
+                    await axios.post('/users/update/photo', formData);
+                }
+            })
         }
     }
     useEffect(() => {
@@ -61,7 +78,7 @@ const MyPage = () => {
                     <Card className='p-5'>
                         <div>
                             <img src={photo || "http://via.placeholder.com/200x200"} onClick={() => ref_file.current.click()} width="200" className='photo mb-3' style={{ cursor: "pointer" }} />
-                            <input type='file' ref={ref_file} onChange={onChangeFile} style={{display:"none"}}/>
+                            <input type='file' ref={ref_file} onChange={onChangeFile} style={{ display: "none" }} />
                             <br />
                             <Button onClick={onUpdatePhoto} size='sm' variant='dark'>이미지 수정</Button>
                             <hr />

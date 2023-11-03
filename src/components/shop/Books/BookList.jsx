@@ -1,12 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import React from 'react'
 import axios from 'axios';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { Table, Row, Col, Button, Container, Spinner, InputGroup, Form } from 'react-bootstrap';
 import Pagination from 'react-js-pagination';
 import '../Pagination.css';
+import { BoxContext } from '../BoxContext';
 
 const BookList = () => {
+    const {box, setBox} = useContext(BoxContext);
     const size = 10;
     const location = useLocation();
     const search = new URLSearchParams(location.search);
@@ -26,7 +28,7 @@ const BookList = () => {
         const res = await axios(url);
         //console.log(res.data);
         let list = res.data.list;
-        list = list.map(book=>book && {...book, checked:false});
+        list = list.map(book => book && { ...book, checked: false });
         setBooks(list);
         setTotal(res.data.total);
         setLoading(false);
@@ -36,9 +38,9 @@ const BookList = () => {
         getBooks();
     }, [location]);
 
-    useEffect(()=>{
-        let cnt=0;
-        books.forEach(book=>book.checked && cnt++);
+    useEffect(() => {
+        let cnt = 0;
+        books.forEach(book => book.checked && cnt++);
         setChcnt(cnt);
     }, [books])
 
@@ -50,31 +52,47 @@ const BookList = () => {
         navi(`${path}?page=1&query=${query}&size=${size}`);
     }
 
-    const onChangeAll =(e)=>{
-        const list =books.map(book=>book && {...book, checked:e.target.checked});
+    const onChangeAll = (e) => {
+        const list = books.map(book => book && { ...book, checked: e.target.checked });
         setBooks(list);
     }
 
-    const onChangeSingle=(e, bid)=>{
-        const list = books.map(book=>book.bid === bid ? {...book, checked:e.target.checked} : book);
+    const onChangeSingle = (e, bid) => {
+        const list = books.map(book => book.bid === bid ? { ...book, checked: e.target.checked } : book);
         setBooks(list);
     }
 
     const onDelete = async (bid) => {
-        if(!window.confirm(`${bid}번 도서를 삭제하실래요?`));
+        //if (!window.confirm(`${bid}번 도서를 삭제하실래요?`));
+        setBox({
+            show:true,
+            message:`${bid}번 도서를 삭제하시겠습니까?`
+        })
         const res = await axios.post('/books/delete', { bid });
-        if(res.data ===0){
-            alert("삭제 실패");
-        }else{
-            alert("삭제 성공");
+        if (res.data === 0) {
+            //alert("삭제 실패");
+            setBox({
+                show:true,
+                message:"삭제 실패"
+            })
+        } else {
+            //alert("삭제 성공");
+            setBox({
+                show:true,
+                message:"삭제 성공"
+            })
             getBooks();
-        }   
+        }
     }
-    const onClickDelete=async()=>{
-        if(chcnt==0){
-            alert("삭제할 도서를 선택하세요")
-        }else {
-            let count=0;
+    const onClickDelete = async () => {
+        if (chcnt == 0) {
+            //alert("삭제할 도서를 선택하세요")
+            setBox({
+                show: true,
+                message: "삭제할 도서를 선택하세요."
+            })
+        } else {
+            let count = 0;/*
             if(window.confirm(`${chcnt}권을 삭제하실래요?`)){
                 for(const book of books){
                     if(book.checked){
@@ -84,7 +102,25 @@ const BookList = () => {
                 }
                 alert(`${count}권 도서삭제`);
                 navi(`${path}?page=1&query=${query}&size=${size}`);
-            }
+            }*/
+            setBox({
+                show: true,
+                message: `${chcnt}권을 삭제하시겠습니까?`,
+                action: async () => {
+                    for (const book of books) {
+                        if (book.checked) {
+                            const res = await axios.post('/books/delete', { bid: book.bid });
+                            if (res.data === 1) count++;
+                        }
+                    }
+                    //alert(`${count}권 도서삭제`);
+                    setBox({
+                        show:true,
+                        message:`${count}권 도서 삭제 되었습니다.`
+                    })
+                    navi(`${path}?page=1&query=${query}&size=${size}`);
+                }
+            })
         }
     }
 
@@ -119,7 +155,7 @@ const BookList = () => {
                         <th>출판사</th>
                         <th>등록일</th>
                         <th>삭제</th>
-                        <th><input type='checkbox' checked={books.length===chcnt} onChange={onChangeAll} /></th>
+                        <th><input type='checkbox' checked={books.length === chcnt} onChange={onChangeAll} /></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -137,8 +173,8 @@ const BookList = () => {
                             <td><div className='ellipsis'>{book.authors}</div></td>
                             <td>{book.publisher}</td>
                             <td>{book.fmtdate}</td>
-                            <td><Button size="sm" onClick={() =>onDelete(book.bid)} variant='light'>삭제</Button></td>
-                            <td><input type='checkbox' checked={book.checked} onChange={(e)=>onChangeSingle(e, book.bid)} /></td>
+                            <td><Button size="sm" onClick={() => onDelete(book.bid)} variant='light'>삭제</Button></td>
+                            <td><input type='checkbox' checked={book.checked} onChange={(e) => onChangeSingle(e, book.bid)} /></td>
                         </tr>
                     )}
                 </tbody>
