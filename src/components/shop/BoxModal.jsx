@@ -32,11 +32,11 @@ const BoxModal = () => {
                     {box.message}
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="success" onClick={onConfirm}>
+                    <Button variant="dark" onClick={onConfirm}>
                         확인
                     </Button>
                     {box.action &&
-                        <Button variant="success" onClick={onClose}>
+                        <Button variant="dark" onClick={onClose}>
                             취소
                         </Button>
                     }

@@ -35,10 +35,18 @@ const HeaderPage = () => {
                         className="me-auto my-2 my-lg-0"
                         style={{ maxHeight: '100px' }}
                         navbarScroll>
-                        <NavLink className="text" to="/books/search">도서 검색</NavLink>
-                        <NavLink className="text" to="/books/list">도서 목록</NavLink>
-                        {sessionStorage.getItem("uid") &&
-                            <NavLink className="text" to="/orders/cart">장바구니</NavLink>
+                        {sessionStorage.getItem("uid") === "admin" &&
+                            <>
+                                <NavLink className="text" to="/books/search">도서 검색</NavLink>
+                                <NavLink className="text" to="/books/list">도서 목록</NavLink>
+                                <NavLink className="text" to="/orders/admin">주문 관리</NavLink>
+                            </>
+                        }
+                        {sessionStorage.getItem("uid") && sessionStorage.getItem("uid") != 'admin' &&
+                            <>
+                                <NavLink className="text" to="/orders/cart">장바구니</NavLink>
+                                <NavLink className="text" to="/orders/list">주문목록</NavLink>
+                            </>
                         }
                     </Nav>
                     <Nav>
